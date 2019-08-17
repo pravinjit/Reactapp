@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 //import Logo from '../assets/logo.png';
 //import Alert from './Alert';
-import _ from 'lodash';
+//import _ from 'lodash';
 
 export default props => {
   console.log(props);

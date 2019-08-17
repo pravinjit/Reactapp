@@ -6,14 +6,14 @@ import reducers from "./reducers/index";
 
 export const store = createStore(
   persistReducer({
-    key: "root", 
+    key: "root",
     storage,
-  }, reducers),
-  {},  
+  },reducers),
+  {},
   compose(
     applyMiddleware(thunk),
-     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() 
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   )
-);
+)
 
 export const persistor = persistStore(store);
