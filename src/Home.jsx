@@ -3,8 +3,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { PRIMARY_COLOR } from './config';
-//import Home from './containers/Home';
-//import Login from './containers/Login';
+import Home from './containers/Home';
+import Login from './containers/Login';
 import Register from './containers/Register';
 
 export default () => {
@@ -18,7 +18,9 @@ export default () => {
     <ThemeProvider theme={blueTheme}>
       <BrowserRouter>
         <Switch>
+          <Route exact path="/Home" component={Home} />> 
           <Route exact path="/register" component={Register} />> 
+          <Route exact path="/login" component={Login} />> 
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

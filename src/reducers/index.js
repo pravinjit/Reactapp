@@ -1,18 +1,18 @@
 import { combineReducers } from 'redux';
-//import alertReducer from './alertReducer';
+import alertReducer from './alertReducer';
 //import alphaReducer from './alphaReducer';
 //import betaReducer from './betaReducer';
 //import gammaReducer from './gammaReducer';
-//import userReducer from './userReducer';
+import userReducer from './userReducer';
 import registrationReducer from './registrationReducer';
 //import onRentReducer from './onRentReducer';
 
 export default combineReducers({
-  // alert: alertReducer,
+   alert: alertReducer,
   // alpha: alphaReducer,
   // beta: betaReducer,
   // gamma: gammaReducer,
-  // user: userReducer,
+  user: userReducer,
   registrations: registrationReducer,
   //onRent: onRentReducer
 });

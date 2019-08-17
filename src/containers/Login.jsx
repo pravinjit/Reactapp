@@ -38,7 +38,7 @@ class Login extends Component {
 
     /* Add User */
     await this.props.loginUser(this.state.email, this.props.registrations);
-    if (this.props.alert.type === 'success') this.props.history.push('/');
+    if (this.props.alert.type === 'success') this.props.history.push('/home');
   }
 
   render() {

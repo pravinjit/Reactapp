@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 //import _ from 'lodash';
 
 export default props => {
-  console.log(props);
   let { firstName, lastName, email, phone, firstNameErr, lastNameErr, emailErr, phoneErr } = props.state;
 
   return (
