@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
-// import Station from '../components/Station';
-// import StationModal from '../components/StationModal';
-// //import PopUp from '../components/PopUp';
-// import RentModal from '../components/RentModal';
-// import handleCharge from '../actions/handleCharge';
-// import rentDrone from '../actions/rentDrone';
-// import handleFlying from '../actions/handleFlying';
-// import returnDrone from '../actions/returnDrone';
+import { makeStyles } from '@material-ui/core/styles';
 import logout from '../actions/logoutUser';
 import clearAlert from '../actions/clearAlert';
+import Grid from '@material-ui/core/Grid';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+}));
 
 class Home extends Component {
   constructor(props) {
@@ -31,73 +36,6 @@ class Home extends Component {
     //this.endFlying = this.endFlying.bind(this);
   }
 
-  // componentDidMount() {
-  //   /* Set Charging for Each Drone */
-  //   setInterval(() => {
-  //     let { alpha, beta, gamma } = this.props;
-  //     this.props.handleCharge(alpha, beta, gamma);
-  //   }, 4000);
-
-  //   /* Fly Rented Drone */
-  //   if (this.props.onRent.manufacturer !== undefined) {
-  //     this.setState({ rentModalOpen: true });
-  //     this.intervalHandle = setInterval(() => {
-  //       if (this.props.onRent.charge === 0) { clearInterval(this.intervalHandle); }
-  //       this.props.handleFlying(this.props.onRent, this.props.user);
-  //     }, 4000);
-  //   }
-    
-  //   /* Set PopUp for Info Msges */
-  //   if (this.props.user.email === undefined) {
-  //     this.setState({
-  //       showPopUp: true,
-  //       popUpMsg: 'You must login to rent a drone..!!'
-  //     });
-  //   }
-
-  //   if (this.props.user.email !== undefined && this.props.user.banned) {
-  //     this.setState({
-  //       showPopUp: true,
-  //       popUpMsg: 'You have been banned..!!'
-  //     });
-  //   }
-  // }
-
-  // droneList(station) {
-  //   /* Trigger Station Modal */
-  //   this.setState({
-  //     modalOpen: true,
-  //     selectedStation: station
-  //   });
-  // }
-
-  // modalClose() {
-  //   this.setState({ modalOpen: false });
-  // }
-
-  // async handleClick(drone) {
-  //   this.props.clearAlert();
-
-  //   /* Check for User Login */
-  //   if (this.props.user.email === undefined) {
-  //     this.props.history.push('/login');
-  //     return false;
-  //   }
-
-  //   /* Start Renting the Drone */
-  //   await this.props.rentDrone(drone);
-  //   this.setState({ modalOpen: false, rentModalOpen: true });
-  //   this.intervalHandle = setInterval(() => {
-  //     if (this.props.onRent.charge === 0) { clearInterval(this.intervalHandle); }
-  //     this.props.handleFlying(this.props.onRent, this.props.user);
-  //   }, 4000);
-  // }
-
-  // async endFlying() {
-  //   /* End Flying the Drone */
-  //   await this.props.returnDrone(this.props.onRent);
-  //   this.setState({ rentModalOpen: false });
-  // }
 
   async handleLogOut() {
     /* User Logout */
@@ -105,13 +43,35 @@ class Home extends Component {
     this.props.history.push('/login');
   }
 
+  
   render() {
+    
     return (
-      <div className="main">
-        <Header user={this.props.user} handleLogOut={this.handleLogOut} />
-
-      
-      </div>
+      <div className={useStyles}>
+       <Grid container spacing={3}>
+         <Grid item xs={12}>
+         <Header user={this.props.user} handleLogOut={this.handleLogOut} />
+         </Grid>
+         <Grid item xs={12} sm={6}>
+           
+         </Grid>
+         <Grid item xs={12} sm={6}>
+           
+         </Grid>
+         <Grid item xs={6} sm={3}>
+           
+         </Grid>
+         <Grid item xs={6} sm={3}>
+           
+         </Grid>
+         <Grid item xs={6} sm={3}>
+           
+         </Grid>
+         <Grid item xs={6} sm={3}>
+           
+         </Grid>
+       </Grid>
+     </div>
     )
   }
 }

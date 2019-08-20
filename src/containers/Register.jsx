@@ -7,6 +7,12 @@ import registerUser from '../actions/registerUser';
 //import clearAlert from '../actions/clearAlert';
 
 
+const options = [
+  { value: 'Mr', label: 'Mr' },
+  { value: 'Miss', label: 'Miss' },
+  { value: 'Dr', label: 'Dr' },
+];
+
 class Register extends Component {
   constructor(props) {
     super(props);
@@ -19,19 +25,28 @@ class Register extends Component {
       firstNameErr: false,
       lastNameErr: false,
       emailErr: false,
-      phoneErr: false
+      phoneErr: false,
+      files: []
     }
     this.initialState = this.state;
     this.handleChange = this.handleChange.bind(this);
+    this.handleChange = this.handleUpload.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange(e){
+    console.log(e);
     this.setState({
+      
       [e.target.name]: e.target.value
     });
   }
  
+  handleUpload(files){
+    this.setState({
+      files: files
+    });
+  }
   async handleClick(){
     let fields = _.pick(this.state, ['firstName', 'lastName', 'email', 'phone']);
     //console.log(this.state);
@@ -51,15 +66,21 @@ class Register extends Component {
     return (
       <div className="user-wrapper">
         <Grid container spacing={0}>
-          
+        <Grid className="reg-image" item xs={12} sm={6}></Grid>
           <Grid className="form-block" item xs={12} sm={6}>
             <RegisterForm 
               handleChange={this.handleChange} 
               handleClick={this.handleClick}
+              handleUpload={this.handleUpload}
               state={this.state}
+              options={options}
             />
+            
           </Grid>
+         
+          
         </Grid>
+        
       </div>
     )
   }

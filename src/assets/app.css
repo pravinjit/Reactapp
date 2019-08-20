@@ -23,7 +23,11 @@ body {
 }
 
 .user-wrapper .bg-image {
-  background: url('bg.png') top center no-repeat;
+  background: url('login.jpg') top center no-repeat;
+  background-size: contain;
+}
+.user-wrapper .reg-image {
+  background: url('registration.jpg') top center no-repeat;
   background-size: cover;
 }
 
