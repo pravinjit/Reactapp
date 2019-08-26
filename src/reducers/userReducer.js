@@ -1,4 +1,4 @@
-import { SET_USER, CLEAR_USER, BAN_USER } from '../config';
+import { SET_USER, CLEAR_USER, BAN_USER,SET_USER_LOGIN, SET_USER_LOGOUT } from '../config';
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -11,6 +11,13 @@ export default (state = {}, action) => {
         ...state,
         banned: true
       };
+    case SET_USER_LOGIN:
+      return {
+        ...action.data,
+        loggedIn: true
+      }
+    case SET_USER_LOGOUT:
+      return {}
     default:
       return state;
   }

@@ -1,4 +1,4 @@
-import { SET_ALERT, CLEAR_ALERT, SET_USER } from '../config';
+import { SET_ALERT, CLEAR_ALERT, SET_USER, SET_TOKEN, TOKEN } from '../config';
 
 export default (email, pervReg) => async dispatch => {
   dispatch({ type: CLEAR_ALERT });
@@ -16,6 +16,11 @@ export default (email, pervReg) => async dispatch => {
   dispatch({ 
       type: SET_USER,
       data: user[0]
+  });
+
+  dispatch({ 
+      type: SET_TOKEN,
+      data: TOKEN
   });
 
   dispatch({ 
