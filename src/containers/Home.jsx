@@ -16,8 +16,9 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import ViewListIcon from '@material-ui/icons/ViewList';
+import HomeIcon from '@material-ui/icons/Home';
 
 import logout from '../actions/logoutUser';
 import clearAlert from '../actions/clearAlert';
@@ -25,6 +26,8 @@ import { store } from '../store';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Propic from '../assets/propic.jpg';
+
+import Add from '../components/Add';
 
 const drawerWidth = 240;
 
@@ -94,11 +97,18 @@ const useStyles = makeStyles(theme => ({
 
 function Home(props) {
   const state = store.getState();
-  console.log(state);
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
 
+  function handleListItemClick(event, index) {
+    setSelectedIndex(index);
+    index == 1 ? props.history.push('/add') : index == 2 ? props.history.push('/list') : props.history.push('/home')
+    
+    
+  }
+  
   function handleDrawerOpen() {
     setOpen(true);
   }
@@ -155,17 +165,45 @@ function Home(props) {
       >
         <div className={classes.toolbar}>
           <IconButton onClick={handleDrawerClose}>
+            Welcome
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </div>
         <Divider />
-        <List>
-          {['Inbox', 'Starred'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+        
+        <List component="nav" aria-label="main mailbox folders">
+          <ListItem
+            button
+            selected={selectedIndex === 0}
+            onClick={event => handleListItemClick(event, 0)}
+          >
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary="Add" />
+          </ListItem>
+
+           <ListItem
+            button
+            selected={selectedIndex === 1}
+            onClick={event => handleListItemClick(event, 1)}
+          >
+            <ListItemIcon>
+              <AddBoxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Home" />
+          </ListItem>
+
+          <ListItem
+            button
+            selected={selectedIndex === 2}
+            onClick={event => handleListItemClick(event, 2)}
+          >
+            <ListItemIcon>
+              <ViewListIcon />
+            </ListItemIcon>
+            <ListItemText primary="List" />
+          </ListItem>
         </List>
         <Divider />
        
@@ -173,8 +211,9 @@ function Home(props) {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Typography paragraph>
-         Welcome to Home page
+          Welcome to Home page
         </Typography>
+        <Add />
       </main>
     </div>
   );

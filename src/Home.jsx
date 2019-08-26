@@ -7,12 +7,16 @@ import Home from './containers/Home';
 import Login from './containers/Login';
 import Register from './containers/Register';
 //import { verifyToken } from './actions/common'
+import { store } from './store';
 
 export default (props) => {
 
   // useEffect(() => {
   //   props.verifyToken()
   // })
+
+  const state = store.getState();
+  
   let blueTheme = createMuiTheme({
     palette: {
       primary: PRIMARY_COLOR
@@ -22,9 +26,16 @@ export default (props) => {
     <ThemeProvider theme={blueTheme}>
       <BrowserRouter>
         <Switch>
-          <Route exact path="/Home" component={Home} />> 
-          <Route exact path="/register" component={Register} />> 
-          <Route exact path="/login" component={Login} />> 
+        
+          <Route exact path="/home" component={Home} /> 
+          <Route exact path="/add" component={Home} /> 
+          <Route exact path="/list" component={Home} />
+        
+          <Route async exact path="/register" component={Register} />
+          {state.user.email == undefined &&
+            <Route async exact path={["/", "/login"]} component={Login} />
+          }
+          
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

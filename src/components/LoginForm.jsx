@@ -7,7 +7,6 @@ import Alert from './Alert';
 import _ from 'lodash';
 
 export default props => {
-  console.log(props);
   return (
     <div className="form">
     
