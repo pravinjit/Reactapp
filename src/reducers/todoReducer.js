@@ -1,4 +1,4 @@
-import { ADD_TODO, EDIT_TODO } from "../config"
+import { ADD_TODO, EDIT_TODO, DELETE_TODO } from "../config"
 
 export default (state = {},action) =>{
   switch (action.type) {
@@ -9,6 +9,8 @@ export default (state = {},action) =>{
       ]
     case EDIT_TODO:
       return action.data;
+    case DELETE_TODO:
+      return action.data
     default:
       return state;
   }

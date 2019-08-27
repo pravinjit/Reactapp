@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+//import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -20,15 +21,21 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import HomeIcon from '@material-ui/icons/Home';
 
-import logout from '../actions/logoutUser';
-import clearAlert from '../actions/clearAlert';
+
 import { store } from '../store';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Propic from '../assets/propic.jpg';
+import _ from 'lodash';
 
 import AddForm from '../components/AddForm';
 import addTodo from '../actions/addTodo';
+import editTodo from '../actions/editTodo';
+import deleteTodo from '../actions/deleteTodo';
+import logout from '../actions/logoutUser';
+import clearAlert from '../actions/clearAlert';
+
+
 
 const drawerWidth = 240;
 
@@ -106,9 +113,7 @@ function Home(props) {
 
   function handleListItemClick(event, index) {
     setSelectedIndex(index);
-    index == 1 ? props.history.push('/add') : index == 2 ? props.history.push('/list') : props.history.push('/home')
-    
-    
+    index === 1 ? props.history.push('/add') : index === 2 ? props.history.push('/list') : props.history.push('/home')
   }
   
   function handleDrawerOpen() {
@@ -125,9 +130,49 @@ function Home(props) {
   }
 
   async function addTodoAction(){
-    console.log(todovalue);
-    await props.addTodo(todovalue);
+    const saveData = {};
+    saveData.value = todovalue;
+    saveData.date = new Date();
+    saveData.completedStatus = false;
+
+    await props.addTodo(saveData);
     setTodovalue("");
+  }
+
+ async function editTodoAction(ival){
+    
+    // await _.update(state.todolist, state.todolist[ival].completedStatus, function(n){
+      
+    //    n === true ? state.todolist[ival].completedStatus = false : state.todolist[ival].completedStatus = true; 
+    // })
+    let allObject = [];
+    state.todolist.filter( function (value, key){
+     if(key == ival){
+       value.completedStatus === true ? value.completedStatus = false : value.completedStatus = true; 
+       allObject.push(value);
+      }else{
+        allObject.push(value);
+      }
+    });
+    //await props.editTodo(state.todolist);
+    await props.editTodo(allObject);
+    
+    //console.log(state.todolist);
+  }
+
+  async function deleteTodoAction(index){
+
+    // console.log(state.todolist[index]);
+    // await _.unset(state.todolist, state.todolist[index]);
+    // console.log(state.todolist);
+    let allObject = [];
+    state.todolist.filter( function (value, key){
+      if(key != index){
+        allObject.push(value);
+      }
+    });
+    await props.deleteTodo(allObject);
+    
   }
 
   return (
@@ -221,7 +266,7 @@ function Home(props) {
         <Typography paragraph>
           Welcome to Home page
         </Typography> 
-        <AddForm todovalue = {todovalue} setTodovalue={setTodovalue} addTodoAction={addTodoAction} list={state.todolist}/>
+        <AddForm todovalue = {todovalue} setTodovalue={setTodovalue} addTodoAction={addTodoAction} list={state.todolist} editTodoAction={editTodoAction} deleteTodoAction={deleteTodoAction}/>
       </main>
     </div>
   );
@@ -231,4 +276,4 @@ const mapStateToProps = ({ user }) => ({
   user 
 });
 
-export default connect(mapStateToProps, {logout, clearAlert, addTodo  })(Home);
+export default connect(mapStateToProps, {logout, clearAlert, addTodo, editTodo, deleteTodo })(Home);

@@ -12,6 +12,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Grid from '@material-ui/core/Grid';
+import Moment from 'react-moment';
+
 
 const useStyles = makeStyles(theme => ({
     textField: {
@@ -26,8 +28,7 @@ const useStyles = makeStyles(theme => ({
 export default props => {
   const classes = useStyles();
   //console.log("props.state")
-  console.log(props)
-  
+  //console.log(props)
   return (
     <div>
     
@@ -42,35 +43,37 @@ export default props => {
         onChange={event => props.setTodovalue(event.target.value)}
         variant="outlined"
       />
-      <Fab color="primary" aria-label="add" className={classes.fab}>
-        <AddIcon onClick={()=>props.addTodoAction()}/>
-      </Fab>
-      <Grid item xs={12} md={4}>
-        <List className={classes.root}>
-        {props.list.map(value => {
-            const labelId = `checkbox-list-label-${value}`;
-
+    <Fab color="primary" aria-label="add" className={classes.fab} onClick={()=>props.addTodoAction()}>
+      <AddIcon />
+    </Fab>
+    <Grid item xs={12} md={4}>
+      <List className={classes.root}>
+        {props.list.map((value, ival) => {
+            const labelId = `checkbox-list-label-${ival}`;
             return (
-            <ListItem key={value} role={undefined} dense button>
-                <ListItemIcon>
+            <ListItem key={ival} role={undefined} dense button>
+              <ListItemIcon>
                 <Checkbox
-                    edge="start"
-                    //checked={checked.indexOf(value) !== -1}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ 'aria-labelledby': labelId }}
+                  edge="start"
+                  checked={value.completedStatus}
+                  onChange={event => props.editTodoAction(ival)}
+                  disableRipple
+                  inputProps={{ 'aria-labelledby': labelId }}
                 />
-                </ListItemIcon>
-                <ListItemText id={labelId} primary={value} />
-                <ListItemSecondaryAction>
+              </ListItemIcon>
+              <ListItemText
+                id={labelId} primary={value.value}
+              />
+              <Moment date={value.date} />
+              <ListItemSecondaryAction>
                 <IconButton edge="end" aria-label="comments">
-                    <DeleteIcon />
+                    <DeleteIcon onClick={event =>props.deleteTodoAction(ival)}/>
                 </IconButton>
-                </ListItemSecondaryAction>
+              </ListItemSecondaryAction>
             </ListItem>
             );
         })}
-        </List>
+      </List>
     </Grid>
     </div>
   )

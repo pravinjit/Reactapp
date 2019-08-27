@@ -1,8 +1,8 @@
-import { ADD_TODO } from "../config"
+import { EDIT_TODO } from "../config"
 
 export default (value) => async dispatch =>{
     dispatch({
-        type: ADD_TODO,
+        type: EDIT_TODO,
         data: value
     })
 }
