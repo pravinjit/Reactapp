@@ -4,8 +4,6 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {DropzoneArea} from 'material-ui-dropzone'
 import Select from 'react-select';
-//import Logo from '../assets/logo.png';
-//import Alert from './Alert';
 //import _ from 'lodash';
 
 export default props => {

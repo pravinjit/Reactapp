@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -27,7 +27,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Propic from '../assets/propic.jpg';
 
-import Add from '../components/Add';
+import AddForm from '../components/AddForm';
+import addTodo from '../actions/addTodo';
 
 const drawerWidth = 240;
 
@@ -99,8 +100,9 @@ function Home(props) {
   const state = store.getState();
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [open, setOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [todovalue , setTodovalue] = useState();
 
   function handleListItemClick(event, index) {
     setSelectedIndex(index);
@@ -117,9 +119,15 @@ function Home(props) {
     setOpen(false);
   }
 
-  let  handleLogOut = () => {
+  let handleLogOut = () => {
     props.logout();
     props.history.push('/login');
+  }
+
+  async function addTodoAction(){
+    console.log(todovalue);
+    await props.addTodo(todovalue);
+    setTodovalue("");
   }
 
   return (
@@ -180,7 +188,7 @@ function Home(props) {
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
-            <ListItemText primary="Add" />
+            <ListItemText primary="Home" />
           </ListItem>
 
            <ListItem
@@ -191,7 +199,7 @@ function Home(props) {
             <ListItemIcon>
               <AddBoxIcon />
             </ListItemIcon>
-            <ListItemText primary="Home" />
+            <ListItemText primary="Add" />
           </ListItem>
 
           <ListItem
@@ -212,8 +220,8 @@ function Home(props) {
         <div className={classes.toolbar} />
         <Typography paragraph>
           Welcome to Home page
-        </Typography>
-        <Add />
+        </Typography> 
+        <AddForm todovalue = {todovalue} setTodovalue={setTodovalue} addTodoAction={addTodoAction} list={state.todolist}/>
       </main>
     </div>
   );
@@ -223,4 +231,4 @@ const mapStateToProps = ({ user }) => ({
   user 
 });
 
-export default connect(mapStateToProps, {logout, clearAlert  })(Home);
+export default connect(mapStateToProps, {logout, clearAlert, addTodo  })(Home);

@@ -177,3 +177,5 @@ export const SET_USER_LOGOUT = 'SET_USER_LOGOUT';
 export const SET_USER_LOGIN = 'SET_USER_LOGIN';
 export const SET_TOKEN = 'SET_TOKEN';
 export const CLEAR_TOKEN = 'CLEAR_TOKEN';
+export const ADD_TODO = 'ADD_TODO';
+export const EDIT_TODO = 'EDIT_TODO';
