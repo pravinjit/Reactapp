@@ -1,6 +1,6 @@
 import { ADD_TODO, EDIT_TODO, DELETE_TODO } from "../config"
 
-export default (state = {},action) =>{
+export default (state = [],action) =>{
   switch (action.type) {
     case ADD_TODO:
       return [

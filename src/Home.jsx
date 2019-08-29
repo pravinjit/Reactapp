@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -32,7 +32,7 @@ export default (props) => {
           <Route exact path="/list" component={Home} />
         
           <Route async exact path="/register" component={Register} />
-          {state.user.email == undefined &&
+          {state.user.email === undefined &&
             <Route async exact path={["/", "/login"]} component={Login} />
           }
           

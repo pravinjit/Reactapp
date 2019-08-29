@@ -12,6 +12,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import Moment from 'react-moment';
 
 
@@ -28,7 +29,11 @@ const useStyles = makeStyles(theme => ({
 export default props => {
   const classes = useStyles();
   //console.log("props.state")
-  //console.log(props)
+  //console.log(props.list)
+  let textStyle = {
+    color: 'red',
+    textDecoration: "line-through" 
+  }
   return (
     <div>
     
@@ -49,8 +54,8 @@ export default props => {
     <Grid item xs={12} md={4}>
       <List className={classes.root}>
         {props.list.map((value, ival) => {
-            const labelId = `checkbox-list-label-${ival}`;
-            return (
+          const labelId = `checkbox-list-label-${ival}`;
+            return value ?  (
             <ListItem key={ival} role={undefined} dense button>
               <ListItemIcon>
                 <Checkbox
@@ -62,16 +67,18 @@ export default props => {
                 />
               </ListItemIcon>
               <ListItemText
-                id={labelId} primary={value.value}
+                id={labelId} primary={ value.completedStatus == true ? <Typography type="body2" style={textStyle}> {value.value}</Typography> : <Typography type="body2" >{value.value} </Typography>}
+                secondary={value.completedStatus == true ? <Moment date={value.date} style={textStyle} /> : <Moment date={value.date} /> }
               />
-              <Moment date={value.date} />
+              
+              
               <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="comments">
-                    <DeleteIcon onClick={event =>props.deleteTodoAction(ival)}/>
+                <IconButton edge="end" aria-label="comments" onClick={() => props.deleteTodoAction(ival)}>
+                    <DeleteIcon />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>
-            );
+            ) : <p> No record</p>;
         })}
       </List>
     </Grid>

@@ -48,15 +48,13 @@ class Register extends Component {
   async handleClick(){
     let fields = _.pick(this.state, ['firstName', 'lastName', 'email', 'phone']);
     //console.log(this.state);
-    console.log(fields);
-
+    
     for (let key in fields) {
       this.state[key] === '' ? this.setState({[`${key}Err`]: true}) : this.setState({[`${key}Err`]: false});
     }
     let validEmail = /\S+@\S+\.\S+/.test(this.state.email) ? true : this.setState({emailErr: true});
     if (Object.keys(fields).filter(v => this.state[v] === '').length > 0 || !validEmail) return false;
-
-
+    
     await this.props.registerUser(fields, this.props.registrations);
     //if (this.props.alert.type === 'success') this.setState({...this.initialState});
   }

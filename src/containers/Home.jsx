@@ -104,12 +104,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Home(props) {
-  const state = store.getState();
+  const fromStore = store.getState();
+  const [state , setState] = useState(fromStore);
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [todovalue , setTodovalue] = useState();
+  const [todovalue , setTodovalue] = useState("");
+  
 
   function handleListItemClick(event, index) {
     setSelectedIndex(index);
@@ -134,44 +136,28 @@ function Home(props) {
     saveData.value = todovalue;
     saveData.date = new Date();
     saveData.completedStatus = false;
-
     await props.addTodo(saveData);
     setTodovalue("");
   }
 
  async function editTodoAction(ival){
     
-    // await _.update(state.todolist, state.todolist[ival].completedStatus, function(n){
-      
-    //    n === true ? state.todolist[ival].completedStatus = false : state.todolist[ival].completedStatus = true; 
-    // })
-    let allObject = [];
-    state.todolist.filter( function (value, key){
-     if(key == ival){
-       value.completedStatus === true ? value.completedStatus = false : value.completedStatus = true; 
-       allObject.push(value);
-      }else{
-        allObject.push(value);
-      }
-    });
-    //await props.editTodo(state.todolist);
-    await props.editTodo(allObject);
+     _.update(state.todolist, ival, function(n){
+      n.completedStatus === true ? n.completedStatus = false : n.completedStatus = true; 
+      return n;
+    })
     
-    //console.log(state.todolist);
+    await props.editTodo(state.todolist);
+    //setState(state);
+    
   }
-
+  
   async function deleteTodoAction(index){
 
-    // console.log(state.todolist[index]);
-    // await _.unset(state.todolist, state.todolist[index]);
-    // console.log(state.todolist);
-    let allObject = [];
-    state.todolist.filter( function (value, key){
-      if(key != index){
-        allObject.push(value);
-      }
-    });
-    await props.deleteTodo(allObject);
+     _.unset(state.todolist, index);
+     await props.deleteTodo(state.todolist);
+    //console.log(fromStore);
+
     
   }
 
