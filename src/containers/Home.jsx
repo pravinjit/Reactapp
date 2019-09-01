@@ -26,12 +26,9 @@ import { store } from '../store';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Propic from '../assets/propic.jpg';
-import _ from 'lodash';
+
 
 import AddForm from '../components/AddForm';
-import addTodo from '../actions/addTodo';
-import editTodo from '../actions/editTodo';
-import deleteTodo from '../actions/deleteTodo';
 import logout from '../actions/logoutUser';
 import clearAlert from '../actions/clearAlert';
 
@@ -110,7 +107,7 @@ function Home(props) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [todovalue , setTodovalue] = useState("");
+  
   
 
   function handleListItemClick(event, index) {
@@ -131,35 +128,8 @@ function Home(props) {
     props.history.push('/login');
   }
 
-  async function addTodoAction(){
-    const saveData = {};
-    saveData.value = todovalue;
-    saveData.date = new Date();
-    saveData.completedStatus = false;
-    await props.addTodo(saveData);
-    setTodovalue("");
-  }
 
- async function editTodoAction(ival){
-    
-     _.update(state.todolist, ival, function(n){
-      n.completedStatus === true ? n.completedStatus = false : n.completedStatus = true; 
-      return n;
-    })
-    
-    await props.editTodo(state.todolist);
-    //setState(state);
-    
-  }
-  
-  async function deleteTodoAction(index){
 
-     _.unset(state.todolist, index);
-     await props.deleteTodo(state.todolist);
-    //console.log(fromStore);
-
-    
-  }
 
   return (
     <div className={classes.root}>
@@ -252,7 +222,7 @@ function Home(props) {
         <Typography paragraph>
           Welcome to Home page
         </Typography> 
-        <AddForm todovalue = {todovalue} setTodovalue={setTodovalue} addTodoAction={addTodoAction} list={state.todolist} editTodoAction={editTodoAction} deleteTodoAction={deleteTodoAction}/>
+        <AddForm />
       </main>
     </div>
   );
@@ -262,4 +232,4 @@ const mapStateToProps = ({ user }) => ({
   user 
 });
 
-export default connect(mapStateToProps, {logout, clearAlert, addTodo, editTodo, deleteTodo })(Home);
+export default connect(mapStateToProps, {logout, clearAlert })(Home);

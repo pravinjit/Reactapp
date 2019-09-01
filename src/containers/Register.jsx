@@ -30,7 +30,7 @@ class Register extends Component {
     }
     this.initialState = this.state;
     this.handleChange = this.handleChange.bind(this);
-    this.handleChange = this.handleUpload.bind(this);
+    this.handleUpload = this.handleUpload.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 

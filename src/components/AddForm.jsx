@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState }  from 'react';
+import { connect, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
@@ -15,6 +16,12 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Moment from 'react-moment';
 
+import addTodo from '../actions/addTodo';
+import editTodo from '../actions/editTodo';
+import deleteTodo from '../actions/deleteTodo';
+
+import _ from 'lodash';
+
 
 const useStyles = makeStyles(theme => ({
     textField: {
@@ -26,7 +33,17 @@ const useStyles = makeStyles(theme => ({
     }
   }));
 
-export default props => {
+  
+function AddForm(props)  {
+  //const fromStore = store.getState();
+
+  const newStore = useSelector(store => store)
+  const newTodo = useSelector(store => store.todolist)
+  
+
+  const [state , setState] = useState(newStore);
+  const [todovalue , setTodovalue] = useState("");
+
   const classes = useStyles();
   //console.log("props.state")
   //console.log(props.list)
@@ -34,6 +51,48 @@ export default props => {
     color: 'red',
     textDecoration: "line-through" 
   }
+  
+  function addTodoAction(){
+    const saveData = {};
+    saveData.value = todovalue;
+    saveData.date = new Date();
+    saveData.completedStatus = false;
+
+    props.addTodo(saveData);
+    setTodovalue("");
+    
+  }
+
+  async function editTodoAction(ival){
+      
+    // _.update(state.todolist, ival, function(n){
+    //  n.completedStatus === true ? n.completedStatus = false : n.completedStatus = true; 
+    //  return n;
+    // })
+
+    let editedVal = newTodo.map((value,index) =>{
+      if (value) {
+        if(index == ival){
+          value.completedStatus == true ? newTodo[index].completedStatus = false : newTodo[index].completedStatus = true; 
+        }
+      }
+      return value
+  
+    });
+
+    //console.log(editedVal)
+    await props.editTodo(editedVal);
+    //setState(state);
+  
+  }
+
+  async function deleteTodoAction(index){
+
+    _.unset(state.todolist, index);
+    await props.deleteTodo(state.todolist);
+    //console.log(fromStore);
+  }
+
   return (
     <div>
     
@@ -43,17 +102,18 @@ export default props => {
         placeholder="My Task"
         className={classes.textField}
         margin="normal"
-        value={props.todovalue}
+        value={todovalue}
         name="todovalue"
-        onChange={event => props.setTodovalue(event.target.value)}
+        onChange={event => setTodovalue(event.target.value)}
         variant="outlined"
       />
-    <Fab color="primary" aria-label="add" className={classes.fab} onClick={()=>props.addTodoAction()}>
+    <Fab color="primary" aria-label="add" className={classes.fab} onClick={()=>addTodoAction()}>
       <AddIcon />
     </Fab>
     <Grid item xs={12} md={4}>
       <List className={classes.root}>
-        {props.list.map((value, ival) => {
+        {newTodo.map((value, ival) => {
+          
           const labelId = `checkbox-list-label-${ival}`;
             return value ?  (
             <ListItem key={ival} role={undefined} dense button>
@@ -61,7 +121,7 @@ export default props => {
                 <Checkbox
                   edge="start"
                   checked={value.completedStatus}
-                  onChange={event => props.editTodoAction(ival)}
+                  onChange={event => editTodoAction(ival)}
                   disableRipple
                   inputProps={{ 'aria-labelledby': labelId }}
                 />
@@ -73,7 +133,7 @@ export default props => {
               
               
               <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="comments" onClick={() => props.deleteTodoAction(ival)}>
+                <IconButton edge="end" aria-label="comments" onClick={() => deleteTodoAction(ival)}>
                     <DeleteIcon />
                 </IconButton>
               </ListItemSecondaryAction>
@@ -85,3 +145,9 @@ export default props => {
     </div>
   )
 }
+
+const mapStateToProps = ({ user }) => ({ 
+  user 
+});
+
+export default connect(mapStateToProps, {addTodo, editTodo, deleteTodo })(AddForm);
