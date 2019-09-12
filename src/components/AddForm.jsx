@@ -15,6 +15,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Moment from 'react-moment';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 import addTodo from '../actions/addTodo';
 import editTodo from '../actions/editTodo';
@@ -88,8 +94,8 @@ function AddForm(props)  {
 
   async function deleteTodoAction(index){
 
-    _.unset(state.todolist, index);
-    await props.deleteTodo(state.todolist);
+    _.unset(newTodo, index);
+    await props.deleteTodo(newTodo);
     //console.log(fromStore);
   }
 

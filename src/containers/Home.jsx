@@ -1,235 +1,115 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-//import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import React, { useState }  from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+
 import List from '@material-ui/core/List';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import ViewListIcon from '@material-ui/icons/ViewList';
-import HomeIcon from '@material-ui/icons/Home';
 
+import Checkbox from '@material-ui/core/Checkbox';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import Grid from '@material-ui/core/Grid';
 
-import { store } from '../store';
-import Avatar from '@material-ui/core/Avatar';
+import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
-import Propic from '../assets/propic.jpg';
+import TextField from '@material-ui/core/TextField';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
-import AddForm from '../components/AddForm';
-import logout from '../actions/logoutUser';
-import clearAlert from '../actions/clearAlert';
+import AddPopup from '../components/AddPopup';
 
-
-
-const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  hide: {
-    display: 'none',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-  },
-  drawerOpen: {
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1)
     },
-  },
-  toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-  floatleft:{
-    justifyContent: 'flex-end'
-  }
-}));
+    fab:{
+      margin: theme.spacing(1),  
+    }
+  }));
 
-function Home(props) {
-  const fromStore = store.getState();
-  const [state , setState] = useState(fromStore);
+  
+function AddForm()  {
+
   const classes = useStyles();
-  const theme = useTheme();
-  const [open, setOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  
-  
 
-  function handleListItemClick(event, index) {
-    setSelectedIndex(index);
-    index === 1 ? props.history.push('/add') : index === 2 ? props.history.push('/list') : props.history.push('/home')
-  }
-  
-  function handleDrawerOpen() {
+  const [open, setOpen] = React.useState(false);
+
+  function handleClickOpen() {
     setOpen(true);
   }
 
-  function handleDrawerClose() {
+  function handleClose() {
     setOpen(false);
   }
 
-  let handleLogOut = () => {
-    props.logout();
-    props.history.push('/login');
-  }
-
-
-
-
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar justify="flex-end">
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
+    <div>
+    <AddPopup/>
+    <Grid item xs={12} md={4}>
+      <List className={classes.root}>
+      <ListItem key={0} role={undefined} dense button>
+        <ListItemIcon>
+          <Checkbox
             edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open,
-            })}
-          >
-            <MenuIcon />
-          </IconButton>
-          <div className={classes.floatleft}>
-            <Avatar alt={state.user.firstName} src={Propic} />
-            Hi {state.user.firstName} <Button onClick={()=>handleLogOut()} size="small" variant="contained">LogOut</Button>
-          </div>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-          }),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
-            Welcome
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </div>
-        <Divider />
+            checked={false}
+            disableRipple
+            inputProps={{ 'aria-labelledby': 1 }}
+          />
+        </ListItemIcon>
+        <ListItemText
+          id={1} primary={"pravin"}
+          secondary={"Date"}
+        />
         
-        <List component="nav" aria-label="main mailbox folders">
-          <ListItem
-            button
-            selected={selectedIndex === 0}
-            onClick={event => handleListItemClick(event, 0)}
-          >
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Home" />
-          </ListItem>
-
-           <ListItem
-            button
-            selected={selectedIndex === 1}
-            onClick={event => handleListItemClick(event, 1)}
-          >
-            <ListItemIcon>
-              <AddBoxIcon />
-            </ListItemIcon>
-            <ListItemText primary="Add" />
-          </ListItem>
-
-          <ListItem
-            button
-            selected={selectedIndex === 2}
-            onClick={event => handleListItemClick(event, 2)}
-          >
-            <ListItemIcon>
-              <ViewListIcon />
-            </ListItemIcon>
-            <ListItemText primary="List" />
-          </ListItem>
-        </List>
-        <Divider />
-       
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Typography paragraph>
-          Welcome to Home page
-        </Typography> 
-        <AddForm />
-      </main>
+        
+        <ListItemSecondaryAction>
+          <IconButton color="secondary" aria-label="comments">
+            <EditIcon />
+          </IconButton>
+          <IconButton edge="end" aria-label="comments" >
+              <DeleteIcon />
+          </IconButton>
+          <Button variant="contained" color="primary" className={classes.button} onClick={handleClickOpen}>
+            Send
+            <Icon >send</Icon>
+          </Button>
+        </ListItemSecondaryAction>
+      </ListItem>
+           
+      </List>
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Share With Friends</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="email"
+            label="Email Id"
+            type="text"
+            fullWidth
+          />
+          
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Submit
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Grid>
     </div>
-  );
-};
+  )
+}
 
-const mapStateToProps = ({ user }) => ({ 
-  user 
-});
-
-export default connect(mapStateToProps, {logout, clearAlert })(Home);
+export default (AddForm);

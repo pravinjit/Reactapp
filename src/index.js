@@ -7,6 +7,7 @@ import Modal from 'react-modal';
 import Home from './Home';
 import './assets/app.css';
 
+
 /* React Modal */
 Modal.setAppElement("#root");
 
