@@ -41,7 +41,7 @@ function AddForm(props)  {
   const newTodo = useSelector(store => store.todolist)
   
 
-  const [state , setState] = useState(newStore);
+  const [state] = useState(newStore);
   const [todovalue , setTodovalue] = useState("");
 
   const classes = useStyles();
@@ -72,8 +72,8 @@ function AddForm(props)  {
 
     let editedVal = newTodo.map((value,index) =>{
       if (value) {
-        if(index == ival){
-          value.completedStatus == true ? newTodo[index].completedStatus = false : newTodo[index].completedStatus = true; 
+        if(index === ival){
+          value.completedStatus === true ? newTodo[index].completedStatus = false : newTodo[index].completedStatus = true; 
         }
       }
       return value
@@ -127,8 +127,8 @@ function AddForm(props)  {
                 />
               </ListItemIcon>
               <ListItemText
-                id={labelId} primary={ value.completedStatus == true ? <Typography type="body2" style={textStyle}> {value.value}</Typography> : <Typography type="body2" >{value.value} </Typography>}
-                secondary={value.completedStatus == true ? <Moment date={value.date} style={textStyle} /> : <Moment date={value.date} /> }
+                id={labelId} primary={ value.completedStatus === true ? <Typography type="body2" style={textStyle}> {value.value}</Typography> : <Typography type="body2" >{value.value} </Typography>}
+                secondary={value.completedStatus === true ? <Moment date={value.date} style={textStyle} /> : <Moment date={value.date} /> }
               />
               
               

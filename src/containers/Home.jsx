@@ -102,7 +102,7 @@ const useStyles = makeStyles(theme => ({
 
 function Home(props) {
   const fromStore = store.getState();
-  const [state , setState] = useState(fromStore);
+  const [state ] = useState(fromStore);
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);

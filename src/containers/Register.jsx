@@ -4,14 +4,14 @@ import Grid from '@material-ui/core/Grid';
 import _ from 'lodash';
 import RegisterForm from '../components/RegisterForm';
 import registerUser from '../actions/registerUser';
-//import clearAlert from '../actions/clearAlert';
+import clearAlert from '../actions/clearAlert';
 
 
-const options = [
-  { value: 'Mr', label: 'Mr' },
-  { value: 'Miss', label: 'Miss' },
-  { value: 'Dr', label: 'Dr' },
-];
+// const options = [
+//   { value: 'Mr', label: 'Mr' },
+//   { value: 'Miss', label: 'Miss' },
+//   { value: 'Dr', label: 'Dr' },
+// ];
 
 class Register extends Component {
   constructor(props) {
@@ -39,7 +39,14 @@ class Register extends Component {
       [e.target.name]: e.target.value
     });
   }
- 
+  
+  componentDidMount() {
+    if (this.props.user.email !== undefined) {
+      this.props.history.push('/');
+    }
+    this.props.clearAlert();
+  }
+
   handleUpload(files){
     this.setState({
       files: files
@@ -56,7 +63,7 @@ class Register extends Component {
     if (Object.keys(fields).filter(v => this.state[v] === '').length > 0 || !validEmail) return false;
     
     await this.props.registerUser(fields, this.props.registrations);
-    //if (this.props.alert.type === 'success') this.setState({...this.initialState});
+    if (this.props.alert.type === 'success') this.setState({...this.initialState});
   }
   render() {
     return (
@@ -69,7 +76,7 @@ class Register extends Component {
               handleClick={this.handleClick}
               handleUpload={this.handleUpload}
               state={this.state}
-              options={options}
+              alert={this.props.alert}
             />
             
           </Grid>
@@ -82,9 +89,9 @@ class Register extends Component {
   }
 }
 
-const mapStateToProps = ({ registrations }) => ({ 
-  registrations 
+const mapStateToProps = ({ registrations, user,  alert }) => ({ 
+  registrations, user, alert
 });
 
-export default connect(mapStateToProps, {registerUser})(Register);
+export default connect(mapStateToProps, {registerUser, clearAlert})(Register);
 //export default Register;
