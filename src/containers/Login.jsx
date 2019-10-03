@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import LoginForm from '../components/LoginForm';
+
 import clearAlert from '../actions/clearAlert';
 import loginUser from '../actions/loginUser';
 
@@ -24,7 +25,7 @@ class Login extends Component {
     }
     this.props.clearAlert();
   }
-
+  
   handleChange(e) {
     this.setState({
       [e.target.name]: e.target.value
@@ -33,11 +34,13 @@ class Login extends Component {
 
   async handleClick() {
     /* Form Validation */
-    let validEmail = /\S+@\S+\.\S+/.test(this.state.email) ? true : this.setState({error: true});
-    if (!validEmail) return false;
+    //let validEmail = /\S+@\S+\.\S+/.test(this.state.email) ? true : this.setState({error: true});
+    //let validPassword = this.state.password ? true : this.setState({error: true});
+    //if (!validEmail || !validPassword) return false;
 
-    /* Add User */
-    await this.props.loginUser(this.state.email, this.props.registrations);
+    console.log("this.state");
+    console.log(this.state);
+    await this.props.loginUser(this.state, this.props.registrations);
     if (this.props.alert.type === 'success') this.props.history.push('/home');
   }
 

@@ -1,235 +1,228 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState }  from 'react';
 import { connect } from 'react-redux';
-//import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import { makeStyles } from '@material-ui/core/styles';
+
 import List from '@material-ui/core/List';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import ViewListIcon from '@material-ui/icons/ViewList';
-import HomeIcon from '@material-ui/icons/Home';
-
-
-import { store } from '../store';
+import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import Propic from '../assets/propic.jpg';
 
+import Checkbox from '@material-ui/core/Checkbox';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import Grid from '@material-ui/core/Grid';
 
-import AddForm from '../components/AddForm';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+
+import AddPopup from '../components/AddPopup';
+
 import logout from '../actions/logoutUser';
 import clearAlert from '../actions/clearAlert';
 
-
-
-const drawerWidth = 240;
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  hide: {
-    display: 'none',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-  },
-  drawerOpen: {
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1)
     },
-  },
-  toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-  floatleft:{
-    justifyContent: 'flex-end'
+    fab:{
+      margin: theme.spacing(1),  
+    },
+    floatleft:{
+      justifyContent: 'flex-end'
+    }
+  }));
+
+  let textStyle = {
+    color: 'red',
+    textDecoration: "line-through" 
   }
-}));
 
-function Home(props) {
-  const fromStore = store.getState();
-  const [state ] = useState(fromStore);
-  const classes = useStyles();
-  const theme = useTheme();
-  const [open, setOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  
-  
+  let paddingStyle = {
+    padding: '30px'
+  }
 
-  function handleListItemClick(event, index) {
-    setSelectedIndex(index);
-    index === 1 ? props.history.push('/add') : index === 2 ? props.history.push('/list') : props.history.push('/home')
+  let padding = {
+    float: "right",
+    marginTop: "-10px"
   }
   
-  function handleDrawerOpen() {
+  let logOutpadding = {
+    float: "right",
+    marginTop: "0px"
+  }
+  
+function AddForm(props)  {
+  
+  let [todos, updateTodo] = useState([])
+  let [open, setOpen] = React.useState(false);
+  let todolist = {
+    title: "",
+    description: "",
+    id: "",
+    email:props.user.email
+  }
+
+  let [auth] = useState(props.user)
+  const [todo, setTodo] = React.useState(todolist)
+
+  const UserEmail = props.user.email;
+  let getData = async () => {
+      
+    
+
+    let res = await axios.post('http://localhost:3001/getList', { UserEmail })
+    updateTodo(res.data)
+  }
+
+  useEffect(() => {
+    getData();
+  }, [])
+
+  let updateLatest = (todo) => updateTodo(todo)
+
+  function handleClose() {
+    setOpen(false);
+  }
+
+  function editList(val) {
+    setTodo({
+      title: val.title,
+      description: val.description,
+      id: val.todo_id
+    })
     setOpen(true);
   }
 
-  function handleDrawerClose() {
-    setOpen(false);
+  function handleChange(e) {
+    setTodo({
+      ...todo,
+      [e.target.id]: e.target.value
+    })
+  }
+
+  async function handleUpdate(type, id = '') {
+    if (type === 'edit') {
+      await axios.post('http://localhost:3001/updateList', { ...todo, type })
+      setOpen(false);
+    }
+    if (type === 'status') {
+      await axios.post('http://localhost:3001/updateList', { id : id.id, status: id.event.target.checked, type })
+    }
+    if (type === 'delete') {
+      await axios.post('http://localhost:3001/updateList', { id, type })
+    }
+    let res = await axios.post('http://localhost:3001/getList', { UserEmail })
+    updateTodo(res.data)
   }
 
   let handleLogOut = () => {
     props.logout();
     props.history.push('/login');
   }
-
-
-
+  
+  if(props.user == 'undefined'){
+    props.history.push('/login');
+  }
+  const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar justify="flex-end">
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open,
-            })}
-          >
-            <MenuIcon />
-          </IconButton>
-          <div className={classes.floatleft}>
-            <Avatar alt={state.user.firstName} src={Propic} />
-            Hi {state.user.firstName} <Button onClick={()=>handleLogOut()} size="small" variant="contained">LogOut</Button>
-          </div>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-          }),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
-            Welcome
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </div>
-        <Divider />
-        
-        <List component="nav" aria-label="main mailbox folders">
-          <ListItem
-            button
-            selected={selectedIndex === 0}
-            onClick={event => handleListItemClick(event, 0)}
-          >
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Home" />
-          </ListItem>
+    <div style={paddingStyle}>
+      <div style={padding}>
+        <Avatar alt={auth.firstName} src={Propic} />
+              Hi {auth.firstName}
+      </div>
+    <AddPopup updateLatest={(todo) => updateLatest(todo)} editList={() => editList()} todo={todo}/>
+    <Button variant="contained" color="secondary" style={logOutpadding} onClick={()=>handleLogOut()}>
+      Log Out
+    </Button>
 
-           <ListItem
-            button
-            selected={selectedIndex === 1}
-            onClick={event => handleListItemClick(event, 1)}
-          >
+    <Grid item xs={12} md={4}>
+      <List className={classes.root}>
+      {
+        todos.length > 0 && todos.map(val => (
+          <ListItem key={val.todo_id} role={undefined} dense button>
             <ListItemIcon>
-              <AddBoxIcon />
+              <Checkbox
+                onChange={(event) => handleUpdate('status', { id: val.todo_id, event})}
+                edge="start"
+                checked={val.status === 1 ? true : false}
+                disableRipple
+                inputProps={{ 'aria-labelledby': val.todo_id }}
+              />
             </ListItemIcon>
-            <ListItemText primary="Add" />
-          </ListItem>
+            <ListItemText
+              id={val.todo_id} primary={ val.status === 1 ? <Typography type="body2" style={textStyle}> {`${val.title} - ${val.date.split('T')[0]}`}</Typography> : <Typography type="body2" >{`${val.title} - ${val.date.split('T')[0]}`} </Typography>}
+              secondary={val.status === 1 ? <Typography style={textStyle}> {val.description}  </Typography> : <Typography> {val.description} </Typography> }
 
-          <ListItem
-            button
-            selected={selectedIndex === 2}
-            onClick={event => handleListItemClick(event, 2)}
-          >
-            <ListItemIcon>
-              <ViewListIcon />
-            </ListItemIcon>
-            <ListItemText primary="List" />
+            />
+            
+            
+            <ListItemSecondaryAction>
+              <IconButton onClick={() => editList(val)} color="secondary" aria-label="comments">
+                <EditIcon />
+              </IconButton>
+              <IconButton onClick={() => handleUpdate('delete', val.todo_id)} edge="end" aria-label="comments" >
+                  <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
           </ListItem>
-        </List>
-        <Divider />
-       
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Typography paragraph>
-          Welcome to Home page
-        </Typography> 
-        <AddForm />
-      </main>
+        ))
+      }    
+      </List>
+    </Grid>
+
+    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Edit To-Do</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="title"
+            label="Title"
+            type="text"
+            defaultValue={todo.title}
+            onChange={event => handleChange(event)}
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            id="description"
+            label="Description"
+            type="text"
+            defaultValue={todo.description}
+            onChange={event => handleChange(event)}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleUpdate('edit')} color="primary">
+            Update
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </div>
-  );
-};
+  )
+}
+
 
 const mapStateToProps = ({ user }) => ({ 
   user 
 });
 
-export default connect(mapStateToProps, {logout, clearAlert })(Home);
+export default connect(mapStateToProps, {logout, clearAlert })(AddForm);

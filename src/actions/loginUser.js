@@ -1,10 +1,10 @@
-import { SET_ALERT, CLEAR_ALERT, SET_USER, SET_TOKEN, TOKEN } from '../config';
+import { SET_ALERT, CLEAR_ALERT, SET_USER } from '../config';
 
-export default (email, pervReg) => async dispatch => {
+export default (loginState, pervReg) => async dispatch => {
   dispatch({ type: CLEAR_ALERT });
 
   /* Check if User exists */
-  let user = pervReg.filter(v => v.email === email);
+  let user = pervReg.filter(v => v.email === loginState.email && v.phone === loginState.phone);
   if (user.length === 0) {
     dispatch({ 
       type: SET_ALERT,
@@ -12,17 +12,13 @@ export default (email, pervReg) => async dispatch => {
     });
     return false;
   }
+  console.log(user);
 
   dispatch({ 
       type: SET_USER,
       data: user[0]
   });
-
-  dispatch({ 
-      type: SET_TOKEN,
-      data: TOKEN
-  });
-
+  
   dispatch({ 
     type: SET_ALERT,
     data: { type: 'success', msg: 'Successfully Logged In.' }
