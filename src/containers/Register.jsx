@@ -41,10 +41,10 @@ class Register extends Component {
   }
   
   componentDidMount() {
-    if (this.props.user.email !== undefined) {
-      this.props.history.push('/');
-    }
-    this.props.clearAlert();
+    // if (this.props.user.email !== undefined) {
+    //   this.props.history.push('/');
+    // }
+    // this.props.clearAlert();
   }
 
   handleUpload(files){
